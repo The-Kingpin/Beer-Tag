@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>List of Beers</title>
+    <script type="text/javascript" th:src="@{webjars/jquery/2.1.4/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{webjars/bootstrap/4.1.0/js/bootstrap.min.js}"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{webjars/bootstrap/4.1.0/css/bootstrap.min.css}"/>
+    <script type="text/javascript" th:src="@{js/main.js}"></script>
+    <link rel="stylesheet"
+          th:href="@{/bootstrap/css/bootstrap.min.css}"/>
+    <!--<link rel="stylesheet" type="text/css"  th:href="@{/bootstrap/css/bootstrap.min.css}"/>-->
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{http://localhost:8080/home}">Home <span class="sr-only"></span></a>
+            </li>
+            <li class="nav-item  active">
+                <a class="nav-link" th:href="@{http://localhost:8080/beers}">Beers</a>
+            </li>
+            <li class="nav-item">
+                <div sec:authorize="hasRole('ROLE_ADMIN')"><a sec:authorize="hasRole('ROLE_ADMIN')" class="nav-link" th:href="@{http://localhost:8080/users}">Users</a>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{http://localhost:8080/register}">Register</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{http://localhost:8080/login}">Login</a>
+            </li>
+            <!--<li class="nav-item">-->
+            <!--<a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>-->
+            <!--</li>-->
+        </ul>
+    </div>
+</nav>
+<div class="container">
+    <button class="btn btn-success nBtn">New</button>
+    <div class="card">
+        <div class="card-block">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>Picture</th>
+                    <th><a th:href="@{/beers/sortbyname}">Name</a></th>
+                    <th><a th:href="@{/beers/sortbyABV}">Alcohol by volum</a></th>
+                    <th><a th:href="@{/beers/sortbyrating}">Rating</a></th>
+                    <!--<th></th>-->
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr th:each="beer : ${beers}">
+                    <td>
+                        <img th:width="32px" name="beerPicture" th:onerror="this.style.display+=none"
+                             th:src="${beer.beerPicture} == null ? _ : @{'data:image/png;base64,'+${beer.printBeerPicture()}}"
+                             class="mr-3" alt="...">
+                    </td>
+                    <td th:text="${beer.getBeerName()}">BeerName</td>
+                    <!--<td th:text="${beer.getBeerStyle().getBeerStyle()}">BeerStyle</td>-->
+                    <td th:text="${beer.getAlcoholByVolume()}">ABV</td>
+                    <td th:text="${beer.avgRating}">Rating from users</td>
+                    <td>
+                        <a th:href="@{/beers/beerDetails(id=${beer.getId()})}" class="btn btn-info vBtn">Details</a>
+                        <a th:href="@{/beers/getBeerById(id=${beer.getId()})}" class="btn btn-primary eBtn">Edit</a>
+                        <a th:href="@{/beers/delete/{id}(id=${beer.id})}" class="btn btn-danger dBtn">Delete</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <hr/>
+
+        </div>
+    </div>
+
+    <div class="myForm">
+        <form th:action="@{/beers/createNew}" method="post" enctype="multipart/form-data">
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel"></h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="input-group mb-3">
+                                <div class="custom-file">
+                                    <input type="file" name="beerPicture" class="custom-file-input" id="picture"
+                                           aria-describedby="inputGroupFileAddon01">
+                                    <label class="custom-file-label" for="picture">Choose file</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="beerName" class="col-form-label">Name:</label>
+                                <input type="text" class="form-control" id="beerName" name="beerName" value=""/>
+                            </div>
+                            <div class="form-group">
+                                <label for="alcoholByVolume" class="col-form-label">ABV:</label>
+                                <input type="text" class="form-control" id="alcoholByVolume" name="alcoholByVolume"
+                                       value=""/>
+                            </div>
+                            <div class="form-group">
+                                <label for="brewery" class="col-form-label">Brewery:</label>
+                                <input type="text" class="form-control" id="brewery" name="brewery" value=""/>
+                            </div>
+                            <div class="form-group">
+                                <label for="description" class="col-form-label">Description:</label>
+                                <textarea class="form-control" id="description" name="description"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-form-label">Country:
+                                    <select class="form-control form-control-lg" name="country">
+                                        <option th:each="country : ${countries}" th:value="${country.id}"
+                                                th:text="${country.name}"></option>
+                                    </select>
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-form-label">Style:
+                                    <select class="form-control form-control-lg" name="beerStyle" id="beerStyle">
+                                        <option th:each="style : ${styles}" th:value="${style.id}"
+                                                th:text="${style.beerStyle}" th:if="${style.beerStyle}"></option>
+                                    </select>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <input type="submit" class="btn btn-primary" value="Save">
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Delete</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p class="alert alert-danger">
+                        Are you sure you want to delete?
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <a href="" type="button" class="btn btn-danger" id="delRef">Delete</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

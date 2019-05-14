@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Register</title>
+    <script type="text/javascript" th:src="@{webjars/jquery/2.1.4/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{webjars/bootstrap/4.1.0/js/bootstrap.min.js}"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{webjars/bootstrap/4.1.0/css/bootstrap.min.css}"/>
+    <script type="text/javascript" th:src="@{js/main.js}" src="../static/js/main.js"></script>
+    <link rel="stylesheet" href="../static/bootstrap/css/bootstrap.min.css"
+          th:href="@{/bootstrap/css/bootstrap.min.css}"/>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{http://localhost:8080/home}">Home </span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{http://localhost:8080/beers}">Beers</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{http://localhost:8080/users}">Users</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" th:href="@{http://localhost:8080/register}">Register<span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{http://localhost:8080/login}">Login</a>
+            </li>
+            <!--<li class="nav-item">-->
+            <!--<a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>-->
+            <!--</li>-->
+        </ul>
+    </div>
+</nav>
+    <div class="container">
+        <h1>Register Page</h1>
+        <form method="POST" th:object="${registrationModel}"  enctype="multipart/form-data">
+            <div class="input-group mb-3">
+                <div class="custom-file">
+                    <input type="file" name="userPicture" class="custom-file-input" id="picture"
+                           aria-describedby="inputGroupFileAddon01" th:field="*{userPicture}">
+                    <label class="custom-file-label" for="picture">Choose file</label>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3" th:classappend="${#fields.hasErrors('firstName')} ? 'has-danger'">
+                <label class="form-control-label" for="inputfirstName">First Name</label>
+                <input type="text" class="form-control form-control-danger" id="inputfirstName" th:field="*{firstName}"/>
+                <!--<div class="form-control-feedback" th:each="error : ${#fields.errors('firstName')}" th:text="${error}">Sorry, that username's taken. Try another?</div>-->
+            </div>
+            <div class="col-md-4 mb-3" th:classappend="${#fields.hasErrors('lastName')} ? 'has-danger'">
+                <label class="form-control-label" for="inputfirstName">Last Name</label>
+                <input type="text" class="form-control form-control-danger" id="inputlastName" th:field="*{lastName}"/>
+                <!--<div class="form-control-feedback" th:each="error : ${#fields.errors('firstName')}" th:text="${error}">Sorry, that username's taken. Try another?</div>-->
+            </div>
+            <div class="col-md-4 mb-3" th:classappend="${#fields.hasErrors('email')} ? 'has-danger'">
+                <label class="form-control-label" for="inputfirstName">e-mail</label>
+                <input type="text" class="form-control form-control-danger" id="inputemail" th:field="*{email}"/>
+                <!--<div class="form-control-feedback" th:each="error : ${#fields.errors('firstName')}" th:text="${error}">Sorry, that username's taken. Try another?</div>-->
+            </div>
+        <div class="col-md-4 mb-3" th:classappend="${#fields.hasErrors('username')} ? 'has-danger'">
+            <label class="form-control-label" for="inputUsername">Username</label>
+            <input type="text" class="form-control form-control-danger" id="inputUsername" th:field="*{username}"/>
+            <div class="form-control-feedback" th:each="error : ${#fields.errors('username')}" th:text="${error}">Sorry, that username's taken. Try another?</div>
+        </div>
+        <div class="col-md-4 mb-3" th:classappend="${#fields.hasErrors('password')}? 'has-danger'">
+            <label class="form-control-label" for="inputPassword">Password</label>
+            <input type="password" class="form-control form-control-danger" id="inputPassword" th:field="*{password}"/>
+            <div class="form-control-feedback" th:each="error : ${#fields.errors('password')}" th:text="${error}">Sorry, that username's taken. Try another?</div>
+        </div>
+        <div class="col-md-4 mb-3" th:classappend="${passwordsNotMatching != null} ? 'has-danger'">
+            <label class="form-control-label" for="inputConfirmPassword">Confirm Password</label>
+            <input type="password" class="form-control form-control-danger" id="inputConfirmPassword" th:field="*{confirmPassword}"/>
+            <div class="form-control-feedback" th:if="${passwordsNotMatching != null}" th:text="${passwordsNotMatching}">Sorry, that username's taken. Try another?</div>
+        </div>
+
+            <input type="submit" class="btn btn-primary"/>
+
+        </form>
+    </div>
+
+    <script th:src="@{/jquery/jquery.min.js}"></script>
+    <script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+</body>
+</html>
