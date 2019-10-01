@@ -2,6 +2,7 @@ HELP.md
 .gradle
 /build/
 !gradle/wrapper/gradle-wrapper.jar
+application.properties
 
 ### STS ###
 .apt_generated
@@ -17,6 +18,7 @@ HELP.md
 *.iws
 *.iml
 *.ipr
+application.properties
 /out/
 
 ### NetBeans ###
